@@ -4,15 +4,28 @@ import torch.nn as nn
 import torch.optim as optim
 import numpy as np
 import matplotlib
+# 'Agg' backend is for writing to file, not for rendering in a window.
 matplotlib.use('Agg')
+from IPython import embed
+
 import matplotlib.pyplot as plt
 
 class Sequence(nn.Module):
+    # super() in python 2 version: super(Sequence, self).__init__() 
     def __init__(self):
-        super(Sequence, self).__init__()
+        foo = super(Sequence, self).__init__()
+        embed()
         self.lstm1 = nn.LSTMCell(1, 51)
         self.lstm2 = nn.LSTMCell(51, 51)
         self.linear = nn.Linear(51, 1)
+
+    # super() in python3 version
+    # def __init__(self):
+    #     super().__init__()
+    #     self.lstm1 = nn.LSTMCell(1, 51)
+    #     self.lstm2 = nn.LSTMCell(51, 51)
+    #     self.linear = nn.Linear(51, 1)
+
 
     def forward(self, input, future = 0):
         outputs = []

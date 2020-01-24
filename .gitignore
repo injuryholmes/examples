@@ -4,3 +4,9 @@ data
 OpenNMT/data
 cpp/mnist/build
 cpp/dcgan/build
+
+# time_sequence_prediction
+/time_sequence_prediction/*.pdf
+/time_sequence_prediction/.ipynb_checkpoints/
+/time_sequence_prediction/traindata.pt
+

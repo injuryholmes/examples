@@ -13,8 +13,7 @@ import matplotlib.pyplot as plt
 class Sequence(nn.Module):
     # super() in python 2 version: super(Sequence, self).__init__() 
     def __init__(self):
-        foo = super(Sequence, self).__init__()
-        embed()
+        super(Sequence, self).__init__()
         self.lstm1 = nn.LSTMCell(1, 51)
         self.lstm2 = nn.LSTMCell(51, 51)
         self.linear = nn.Linear(51, 1)
@@ -54,13 +53,14 @@ if __name__ == '__main__':
     torch.manual_seed(0)
     # load data and make training set
     data = torch.load('traindata.pt')
-    input = torch.from_numpy(data[3:, :-1])
-    target = torch.from_numpy(data[3:, 1:])
-    test_input = torch.from_numpy(data[:3, :-1])
-    test_target = torch.from_numpy(data[:3, 1:])
+    input = torch.from_numpy(data[3:, :-1]) # train data input
+    target = torch.from_numpy(data[3:, 1:]) # train data labels
+    test_input = torch.from_numpy(data[:3, :-1]) # test data input
+    test_target = torch.from_numpy(data[:3, 1:]) # test data labels
     # build the model
     seq = Sequence()
     seq.double()
+    # Creates a criterion that measures the mean squared error (squared L2 norm) between each element in the input xx and target yy .
     criterion = nn.MSELoss()
     # use LBFGS as optimizer since we can load the whole data to train
     optimizer = optim.LBFGS(seq.parameters(), lr=0.8)

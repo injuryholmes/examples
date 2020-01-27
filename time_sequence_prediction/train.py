@@ -25,7 +25,6 @@ class Sequence(nn.Module):
     #     self.lstm2 = nn.LSTMCell(51, 51)
     #     self.linear = nn.Linear(51, 1)
 
-
     def forward(self, input, future = 0):
         outputs = []
         h_t = torch.zeros(input.size(0), 51, dtype=torch.double)
@@ -34,8 +33,14 @@ class Sequence(nn.Module):
         c_t2 = torch.zeros(input.size(0), 51, dtype=torch.double)
 
         for i, input_t in enumerate(input.chunk(input.size(1), dim=1)):
+            # 调用LSTMCell()的时候，实际上最后调用的LSTMCell.forward()函数，并在内部解决了tracking和hooks
+            # input: tensor containing input features
+            # h_t: tensor containing the hidden state at time t for each element in the batch.
+            # c_t: tensor containing the cell state at time t for each element in the batch.
             h_t, c_t = self.lstm1(input_t, (h_t, c_t))
-            h_t2, c_t2 = self.lstm2(h_t, (h_t2, c_t2))
+            # 上一个lstmCell的hidden state h_t作为下一个lstmCell的input 
+            h_t2, c_t2 = self.lstm2(h_t, (h_t2, c_t2)) 
+            # 第二个lstm2的hidden state 作为下一个linear layer的input
             output = self.linear(h_t2)
             outputs += [output]
         for i in range(future):# if we should predict the future
